@@ -26,10 +26,12 @@
         (with-release [vx (view x)
                        vy (view y)]
           (axpy! x y)
-          (axpy! vx vy))
+          (axpy! vx vy)
+          (clojurecuda/synchronize!))
         (axpy! x y)
-        (with-release [host-x (transfer! x)]
-          (fold host-x))))))                              ; = 50.0
+        (clojurecuda/synchronize!)
+        (with-release [host-y (transfer y)]
+          (fold host-y))))))                                ; = 50.0
 
 (comment
 
